@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "name": "Self-Building Demo",
+    "version": "1.0.0",
+    "description": "Offline self-evolving JVM demo spec"
+  },
+  "functional_requirements": [
+    {
+      "id": "FR-001",
+      "title": "Process input",
+      "description": "Transform input to output with OK marker",
+      "inputs": [
+        { "name": "input", "type": "string", "constraints": "non-empty" }
+      ],
+      "outputs": [
+        { "name": "output", "type": "string", "constraints": "must contain OK" }
+      ],
+      "acceptance_criteria": [
+        "Output contains OK",
+        "Output matches regex",
+        "Output is deterministic"
+      ]
+    }
+  ],
+  "invariants": [
+    {
+      "id": "INV-001",
+      "description": "Output is deterministic",
+      "type": "DETERMINISM",
+      "params": {}
+    },
+    {
+      "id": "INV-002",
+      "description": "Output is non-null",
+      "type": "NON_NULL",
+      "params": {}
+    },
+    {
+      "id": "INV-003",
+      "description": "Output must contain OK",
+      "type": "CONTAINS_SUBSTRING",
+      "params": { "substring": "OK" }
+    },
+    {
+      "id": "INV-004",
+      "description": "Output matches pattern",
+      "type": "REGEX",
+      "params": { "regex": "OK:.*" }
+    }
+  ],
+  "examples": [
+    { "id": "EX-001", "input": "alpha", "expected_output_contains": ["OK"] },
+    { "id": "EX-002", "input": "beta", "expected_output_contains": ["OK", ":beta"] },
+    { "id": "EX-003", "input": "gamma", "expected_output_contains": ["OK", "gamma"] }
+  ],
+  "constraints": {
+    "forbidden_packages": ["java.io", "java.net", "java.lang.reflect"],
+    "forbidden_classes": [
+      "java.lang.Runtime",
+      "java.lang.ProcessBuilder",
+      "sun.misc.Unsafe"
+    ],
+    "allowed_packages": ["java.lang", "java.util", "java.time", "com.example.api"]
+  }
+}
