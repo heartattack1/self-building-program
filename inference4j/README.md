@@ -64,6 +64,10 @@ java --add-modules jdk.incubator.vector \
 
 ## Examples
 
+## Supported quantization
+
+The loader currently supports `Q4_0`, `Q8_0`, `F16`, and `BF16` GGUF tensors. Other formats (including `Q5_K`) are not yet supported.
+
 ### Single-shot instruct prompt
 
 ```bash
