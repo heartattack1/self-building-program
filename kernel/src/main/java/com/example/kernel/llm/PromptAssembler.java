@@ -37,7 +37,14 @@ public class PromptAssembler {
 
         prompt.append("\nExamples:\n");
         for (ExampleSpec example : requirements.examples()) {
-            prompt.append("- input: ").append(example.input()).append(" -> output: ").append(example.output()).append("\n");
+            String expected = example.expectedOutputContains() == null
+                    ? "[]"
+                    : example.expectedOutputContains().stream().collect(Collectors.joining(", ", "[", "]"));
+            prompt.append("- input: ")
+                    .append(example.input())
+                    .append(" -> output contains: ")
+                    .append(expected)
+                    .append("\n");
         }
 
         prompt.append("\nConstraints:\n");
