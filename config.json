@@ -1,15 +1,15 @@
 {
   "llm": {
-    "mode": "stub",
-    "timeout_ms": 30000,
-    "max_output_chars": 16000,
+    "mode": "inference4j",
+    "timeout_ms": 120000,
+    "max_output_chars": 32000,
     "seed": null,
-    "temperature": 0.2,
-    "max_tokens": 512,
-    "top_p": 0.9,
+    "temperature": 0.0,
+    "max_tokens": 2048,
+    "top_p": 1.0,
     "inference4j": {
-      "model_path": "./models/llama3.gguf",
-      "context_length": null
+      "model_path": "/absolute/path/to/self-building-program/models/qwen2.5-1.5b-instruct-q5_k_m.gguf",
+      "context_length": 4096
     }
   }
 }

@@ -55,8 +55,8 @@ public class Verifier {
         List<String> findings = new ArrayList<>();
         Set<String> forbiddenTokens = new HashSet<>();
         constraints.forbiddenPackages().forEach(pkg -> forbiddenTokens.add(pkg.replace('.', '/')));
-        constraints.forbiddenClasses().forEach(forbiddenTokens::add);
-        HARD_FORBIDDEN.forEach(forbiddenTokens::add);
+        forbiddenTokens.addAll(constraints.forbiddenClasses());
+        forbiddenTokens.addAll(HARD_FORBIDDEN);
         forbiddenTokens.add("java/io");
         forbiddenTokens.add("java/net");
         forbiddenTokens.add("java/lang/reflect");
