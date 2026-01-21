@@ -8,7 +8,7 @@
     "max_tokens": 2048,
     "top_p": 1.0,
     "inference4j": {
-      "model_path": "/absolute/path/to/self-building-program/models/qwen2.5-1.5b-instruct-q5_k_m.gguf",
+      "model_path": "/home/roberts31337/dev/local/self-building-program/models/qwen2.5-1.5b-instruct-q5_k_m.gguf",
       "context_length": 4096
     }
   }
