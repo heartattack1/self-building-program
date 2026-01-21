@@ -11,7 +11,7 @@ This repository is a Java 17, multi-module Gradle project that demonstrates an o
 ## How to Run
 
 ```bash
-./gradlew :app:run --args="spec.json"
+./gradlew :app:run --args="spec.json ./config.json"
 ```
 
 ## How Iteration Works
@@ -51,4 +51,45 @@ Extend `Verifier` in the `kernel` module:
 
 ## Replacing Stub Planner/CodeGen
 
-Implement `Planner` and `CodeGen` with a real LLM adapter later. This skeleton keeps the interface stable and intentionally does **not** include any network calls. Replace `StubPlanner` and `StubCodeGen` within `Kernel` to integrate a real offline/isolated model.
+The kernel now supports an offline LLM adapter backed by the local `inference4j` library. The stub planner/codegen remain the default fallback.
+
+### Enable inference4j
+
+1. Place a local GGUF model on disk (no downloads at runtime).
+2. Update `config.json`:
+
+```json
+{
+  "llm": {
+    "mode": "inference4j",
+    "inference4j": {
+      "model_path": "/absolute/path/to/model.gguf",
+      "context_length": 4096
+    },
+    "timeout_ms": 30000,
+    "max_output_chars": 16000,
+    "seed": 42,
+    "temperature": 0.2,
+    "max_tokens": 512,
+    "top_p": 0.9
+  }
+}
+```
+
+3. Run:
+
+```bash
+./gradlew :app:run --args="spec.json ./config.json"
+```
+
+### Determinism and JSON-only output
+
+- If `llm.seed` is omitted, the kernel derives a deterministic seed from `specHash`.
+- The inference adapter enforces max output size, timeouts, and validates strict JSON-only responses for both planning and codegen.
+- Any non-JSON output is rejected after extraction/validation.
+
+### Troubleshooting
+
+- **Timeouts**: increase `llm.timeout_ms`.
+- **Invalid JSON**: lower temperature or force `temperature: 0.0`.
+- **Verifier failures**: adjust constraints or ensure generated code only uses the stable API.

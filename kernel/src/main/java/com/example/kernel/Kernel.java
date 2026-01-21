@@ -1,6 +1,11 @@
 package com.example.kernel;
 
 import com.example.api.ServiceFacade;
+import com.example.kernel.config.KernelConfig;
+import com.example.kernel.config.LlmMode;
+import com.example.kernel.llm.Inference4jLLMAdapter;
+import com.example.kernel.llm.LLMCodeGen;
+import com.example.kernel.llm.LLMPlanner;
 import com.example.kernel.compiler.CompilationResult;
 import com.example.kernel.compiler.InMemoryJavaCompiler;
 import com.example.kernel.model.StructuredRequirements;
@@ -25,9 +30,19 @@ public class Kernel {
     private final HotSwapManager hotSwapManager;
 
     public Kernel(Path registryPath) {
+        this(registryPath, KernelConfig.defaults());
+    }
+
+    public Kernel(Path registryPath, KernelConfig config) {
         this.specParser = new SpecParser();
-        this.planner = new StubPlanner();
-        this.codeGen = new StubCodeGen();
+        if (config.llm().mode() == LlmMode.INFERENCE4J) {
+            Inference4jLLMAdapter adapter = new Inference4jLLMAdapter(config.llm());
+            this.planner = new LLMPlanner(adapter, config.llm());
+            this.codeGen = new LLMCodeGen(adapter, config.llm());
+        } else {
+            this.planner = new StubPlanner();
+            this.codeGen = new StubCodeGen();
+        }
         this.verifier = new Verifier();
         this.compiler = new InMemoryJavaCompiler();
         this.testRunner = new TestRunner();

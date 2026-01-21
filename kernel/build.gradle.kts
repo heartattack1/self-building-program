@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     api(project(":api"))
+    implementation(project(":inference4j"))
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
     implementation("org.junit.platform:junit-platform-launcher:1.10.2")
