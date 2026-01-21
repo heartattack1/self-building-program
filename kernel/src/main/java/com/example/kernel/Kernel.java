@@ -35,7 +35,6 @@ public class Kernel {
 
     public Kernel(Path registryPath, KernelConfig config) {
         this.specParser = new SpecParser();
-        this.llmMode = config.llm().mode();
         if (config.llm().mode() == LlmMode.INFERENCE4J) {
             Inference4jLLMAdapter adapter = new Inference4jLLMAdapter(config.llm());
             this.planner = new LLMPlanner(adapter, config.llm());

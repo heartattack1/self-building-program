@@ -5,11 +5,11 @@
     "max_output_chars": 32000,
     "seed": null,
     "temperature": 0.0,
-    "max_tokens": 2048,
+    "max_tokens": 768,
     "top_p": 1.0,
     "inference4j": {
-      "model_path": "/home/roberts31337/dev/local/self-building-program/models/qwen2.5-1.5b-instruct-q5_k_m.gguf",
-      "context_length": 4096
+      "model_path": "/home/roberts31337/dev/local/self-building-program/models/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
+      "context_length": 2048
     }
   }
 }
