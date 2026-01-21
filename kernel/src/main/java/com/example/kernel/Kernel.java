@@ -28,6 +28,9 @@ public class Kernel {
     private final VersionRegistry registry;
     private final AtomicReference<ServiceFacade> delegate;
     private final HotSwapManager hotSwapManager;
+    private final LlmMode llmMode;
+    private final Planner fallbackPlanner;
+    private final CodeGen fallbackCodeGen;
 
     public Kernel(Path registryPath) {
         this(registryPath, KernelConfig.defaults());
@@ -35,6 +38,7 @@ public class Kernel {
 
     public Kernel(Path registryPath, KernelConfig config) {
         this.specParser = new SpecParser();
+        this.llmMode = config.llm().mode();
         if (config.llm().mode() == LlmMode.INFERENCE4J) {
             Inference4jLLMAdapter adapter = new Inference4jLLMAdapter(config.llm());
             this.planner = new LLMPlanner(adapter, config.llm());
@@ -43,6 +47,8 @@ public class Kernel {
             this.planner = new StubPlanner();
             this.codeGen = new StubCodeGen();
         }
+        this.fallbackPlanner = new StubPlanner();
+        this.fallbackCodeGen = new StubCodeGen();
         this.verifier = new Verifier();
         this.compiler = new InMemoryJavaCompiler();
         this.testRunner = new TestRunner();
@@ -68,8 +74,8 @@ public class Kernel {
         CandidateHandle previousCandidate = hotSwapManager.active();
 
         for (int iteration = 0; iteration < 3; iteration++) {
-            Plan plan = planner.plan(requirements, iteration);
-            GeneratedSourceBundle sources = codeGen.generate(requirements, plan, iteration);
+            Plan plan = planWithFallback(requirements, iteration);
+            GeneratedSourceBundle sources = generateWithFallback(requirements, plan, iteration);
 
             VerificationReport sourceReport = verifier.verifySources(sources.sources(), requirements.constraints());
             if (!sourceReport.passed()) {
@@ -165,5 +171,29 @@ public class Kernel {
         java.util.List<String> merged = new java.util.ArrayList<>(first);
         merged.addAll(second);
         return merged;
+    }
+
+    private Plan planWithFallback(StructuredRequirements requirements, int iteration) {
+        try {
+            return planner.plan(requirements, iteration);
+        } catch (RuntimeException e) {
+            if (llmMode == LlmMode.INFERENCE4J) {
+                LOGGER.log(Level.WARNING, "LLM planner failed; falling back to stub planner.", e);
+                return fallbackPlanner.plan(requirements, iteration);
+            }
+            throw e;
+        }
+    }
+
+    private GeneratedSourceBundle generateWithFallback(StructuredRequirements requirements, Plan plan, int iteration) {
+        try {
+            return codeGen.generate(requirements, plan, iteration);
+        } catch (RuntimeException e) {
+            if (llmMode == LlmMode.INFERENCE4J) {
+                LOGGER.log(Level.WARNING, "LLM codegen failed; falling back to stub codegen.", e);
+                return fallbackCodeGen.generate(requirements, plan, iteration);
+            }
+            throw e;
+        }
     }
 }

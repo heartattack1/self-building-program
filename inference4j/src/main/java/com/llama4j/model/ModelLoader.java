@@ -221,7 +221,8 @@ public final class ModelLoader {
             case Q4_0 -> new Q4_0FloatTensor(FloatTensor.numberOfElements(entry.shape()), entry.memorySegment());
             case BF16 -> new BF16FloatTensor(FloatTensor.numberOfElements(entry.shape()), entry.memorySegment());
             case F16 -> new F16FloatTensor(FloatTensor.numberOfElements(entry.shape()), entry.memorySegment());
-            default -> throw new UnsupportedOperationException("Quantization format " + ggmlType);
+            default -> throw new UnsupportedOperationException(
+                    "Quantization format " + ggmlType + " is not supported. Supported: Q4_0, Q8_0, F16, BF16.");
         };
     }
 
