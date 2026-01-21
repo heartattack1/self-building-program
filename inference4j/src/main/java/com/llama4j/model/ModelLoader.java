@@ -8,6 +8,7 @@ import com.llama4j.tensor.F16FloatTensor;
 import com.llama4j.tensor.FloatTensor;
 import com.llama4j.tensor.Q4_0FloatTensor;
 import com.llama4j.tensor.Q4_KFloatTensor;
+import com.llama4j.tensor.Q6_KFloatTensor;
 import com.llama4j.tensor.Q8_0FloatTensor;
 import com.llama4j.tensor.RoPE;
 import com.llama4j.tokenizer.Tokenizer;
@@ -221,10 +222,11 @@ public final class ModelLoader {
             case Q8_0 -> new Q8_0FloatTensor(FloatTensor.numberOfElements(entry.shape()), entry.memorySegment());
             case Q4_0 -> new Q4_0FloatTensor(FloatTensor.numberOfElements(entry.shape()), entry.memorySegment());
             case Q4_K -> new Q4_KFloatTensor(FloatTensor.numberOfElements(entry.shape()), entry.memorySegment());
+            case Q6_K -> new Q6_KFloatTensor(FloatTensor.numberOfElements(entry.shape()), entry.memorySegment());
             case BF16 -> new BF16FloatTensor(FloatTensor.numberOfElements(entry.shape()), entry.memorySegment());
             case F16 -> new F16FloatTensor(FloatTensor.numberOfElements(entry.shape()), entry.memorySegment());
             default -> throw new UnsupportedOperationException(
-                    "Quantization format " + ggmlType + " is not supported. Supported: Q4_0, Q4_K, Q8_0, F16, BF16.");
+                    "Quantization format " + ggmlType + " is not supported. Supported: Q4_0, Q4_K, Q6_K, Q8_0, F16, BF16.");
         };
     }
 
