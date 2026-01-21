@@ -2,7 +2,8 @@
   "meta": {
     "name": "Self-Building Demo",
     "version": "1.0.0",
-    "description": "Offline self-evolving JVM demo spec"
+    "description": "Offline self-evolving JVM demo spec",
+    "goal": "Self learn, self create, and iteratively improve."
   },
   "functional_requirements": [
     {
