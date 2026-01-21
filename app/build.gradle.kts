@@ -9,4 +9,5 @@ dependencies {
 
 application {
     mainClass.set("com.example.app.AppMain")
+    applicationDefaultJvmArgs = listOf("--add-modules", "jdk.incubator.vector")
 }
