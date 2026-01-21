@@ -97,7 +97,7 @@ public final class Q8_0FloatTensor extends FloatTensor {
      */
     @Override
     public float dot(int thisOffset, FloatTensor that, int thatOffset, int size) {
-        if (FloatTensor.USE_VECTOR_API) {
+        if (FloatTensor.USE_VECTOR_API && FloatTensor.F_SPECIES.vectorBitSize() >= 512) {
             return vectorDot(this, thisOffset, (ArrayFloatTensor) that, thatOffset, size);
         } else {
             return FloatTensor.scalarDot(this, thisOffset, that, thatOffset, size);
