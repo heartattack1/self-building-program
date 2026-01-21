@@ -31,7 +31,7 @@ No changes are needed in the shared factories once the providers are registered.
 
 ## Download a model (GGUF)
 
-Download a `Q4_0` or `Q8_0` GGUF file, for example:
+Download a `Q4_0`, `Q4_K`, or `Q8_0` GGUF file, for example:
 
 ```bash
 # Llama 3.2 (3B)
@@ -39,6 +39,9 @@ curl -L -O https://huggingface.co/mukel/Llama-3.2-3B-Instruct-GGUF/resolve/main/
 
 # Llama 3.2 (1B)
 curl -L -O https://huggingface.co/mukel/Llama-3.2-1B-Instruct-GGUF/resolve/main/Llama-3.2-1B-Instruct-Q8_0.gguf
+
+# Llama 3.2 (1B) Q4_K_M
+curl -L -O https://huggingface.co/mukel/Llama-3.2-1B-Instruct-GGUF/resolve/main/Llama-3.2-1B-Instruct-Q4_K_M.gguf
 ```
 
 ## Build
@@ -66,7 +69,7 @@ java --add-modules jdk.incubator.vector \
 
 ## Supported quantization
 
-The loader currently supports `Q4_0`, `Q8_0`, `F16`, and `BF16` GGUF tensors. Other formats (including `Q5_K`) are not yet supported.
+The loader currently supports `Q4_0`, `Q4_K` (including `Q4_K_M`), `Q8_0`, `F16`, and `BF16` GGUF tensors. Other formats (including `Q5_K`) are not yet supported.
 
 ### Single-shot instruct prompt
 
