@@ -1,6 +1,15 @@
 # Self-Building Program (Offline JVM Skeleton)
 
-This repository is a Java 17, multi-module Gradle project that demonstrates an offline, self-evolving JVM application. A minimal trusted kernel ingests a `spec.json`, produces a deterministic plan and code bundle, verifies it, compiles it in-memory, loads it via a versioned classloader, runs tests and shadow execution, then atomically swaps the active implementation.
+This repository is a Java 25, multi-module Gradle project that demonstrates an offline, self-evolving JVM application. A minimal trusted kernel ingests a `spec.json`, produces a deterministic plan and code bundle, verifies it, compiles it in-memory, loads it via a versioned classloader, runs tests and shadow execution, then atomically swaps the active implementation.
+
+## Verify JDK
+
+Make sure a JDK 25 installation is available (either on `PATH` or via Gradle toolchains):
+
+```bash
+java -version
+./gradlew --version
+```
 
 ## Modules
 

@@ -28,7 +28,12 @@ public class InMemoryJavaCompiler {
             compilationUnits.add(new SourceFileObject(entry.getKey(), entry.getValue()));
         }
 
-        List<String> options = List.of("-classpath", System.getProperty("java.class.path"));
+        List<String> options = List.of(
+                "-classpath",
+                System.getProperty("java.class.path"),
+                "--release",
+                "25"
+        );
         JavaCompiler.CompilationTask task = compiler.getTask(
                 null,
                 fileManager,
